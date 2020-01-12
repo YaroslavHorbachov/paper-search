@@ -8,14 +8,13 @@ import {
 } from '@nestjs/common';
 import * as fs from 'fs';
 import { promisify } from 'util';
-
 import { SearchService } from './search.service';
 import { SetupIndexData } from './setup-index-data';
 
 const readFile = promisify(fs.readFile);
 
 @Injectable({ scope: Scope.TRANSIENT })
-export class SearchManagerService {
+export class SearchManagerService<Entity extends { id?: string }> {
   private indexName: string;
   private mappingsPath: string;
 
@@ -45,7 +44,12 @@ export class SearchManagerService {
         // Create index with mappings
         console.log(`Index: ${this.indexName} is not exists`);
 
-        const file = await readFile(this.mappingsPath);
+        let file;
+        try {
+          file = await readFile(this.mappingsPath);
+        } catch (error) {
+          console.error(error);
+        }
 
         if (!file) {
           console.log(`Index: ${this.indexName}, mappings file not found`);
@@ -78,7 +82,7 @@ export class SearchManagerService {
     return result;
   }
 
-  public async getRecord(id: string) {
+  public async getRecord(id: string): Promise<Entity> {
     const result = await this.search.client.search({
       index: this.indexName,
       body: {
@@ -87,37 +91,54 @@ export class SearchManagerService {
         },
       },
     });
-    console.log(result.body.hits);
-    return result;
+    // tslint:disable-next-line: no-console
+    console.log(result);
+
+    return result.body;
   }
 
-  public async getRecords() {
+  public async getRecordsByQuery(query: any): Promise<Entity[]> {
+    const result = await this.search.client.search({
+      index: this.indexName,
+      body: { query },
+    });
+    // tslint:disable-next-line: no-console
+    console.log(result);
+
+    return result.body;
+  }
+
+  public async getRecords(): Promise<Entity[]> {
     const result = await this.search.client.search({
       index: this.indexName,
     });
 
-    return result;
+    // tslint:disable-next-line: no-console
+    console.log(result);
+    return result.body;
   }
 
-  public async createRecord(body: any) {
+  public async createRecord({ id, ...body }: Entity) {
     const result = await this.search.client.index({
-      refresh: 'true',
+      id,
       index: this.indexName,
       body,
+      refresh: 'true',
       timeout: '1s',
     });
     // tslint:disable-next-line: no-console
+    console.log('Created Record');
     console.log(result);
 
     return result;
   }
 
-  public async updateRecord(id: string, body: any) {
+  public async updateRecord(id: string, body: Entity) {
     const result = await this.search.client.index({
       id,
-      refresh: 'true',
       index: this.indexName,
       body,
+      refresh: 'true',
       timeout: '1s',
     });
     // tslint:disable-next-line: no-console

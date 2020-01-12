@@ -8,12 +8,12 @@ import { SearchManagerService } from '../search/search-manager.service';
 
 @Injectable()
 export class AuthorsService {
-  constructor(private readonly search: SearchManagerService) {}
+  constructor(private readonly search: SearchManagerService<Author>) {}
 
   private authors = [new Author()];
 
   public getAuthor(id: string) {
-    return this.search.getRecord(id);
+    return this.search.getRecordsByQuery(id);
   }
 
   public createAuthor(updateAuthorData: CreateOrUpdateAuthorInput) {

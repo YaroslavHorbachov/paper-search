@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { PapersService } from './papers.service';
 import { PaperResolver } from './paper.resolver';
 import { SearchModule } from '../search/search.module';
-import { ConfigService } from '../config/config.service';
 import { SearchManagerService } from '../search/search-manager.service';
 import { SetupIndexData } from '../search/setup-index-data';
 import { PAPERS_INDEX_NAME } from './papers.constants';
@@ -20,10 +19,7 @@ import { SearchService } from '../search/search.service';
       useFactory: async search => {
         const service = new SearchManagerService(
           search,
-          new SetupIndexData(
-            PAPERS_INDEX_NAME,
-            join(__dirname, 'mappings/paper'),
-          ),
+          new SetupIndexData(PAPERS_INDEX_NAME, 'mappings/papers.json'),
         );
 
         await service.syncIndex();
@@ -33,6 +29,6 @@ import { SearchService } from '../search/search.service';
       inject: [SearchService],
     },
   ],
-  exports: [],
+  exports: [PapersService],
 })
 export class PapersModule {}

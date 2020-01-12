@@ -23,6 +23,7 @@ export class ConfigService {
       PORT: Joi.number().default(7878),
       ELASTICSEARCH_PORT_NUMBER: Joi.number(),
       ELASTICSEARCH_BIND_ADDRESS: Joi.string(),
+      TELEGRAM_BOT_TOKEN: Joi.string(),
     });
 
     const { error, value } = Joi.validate(envConfig, envSchema);
@@ -48,5 +49,9 @@ export class ConfigService {
 
   public get searchNodeUrl() {
     return `http://${this.searchHost}:${this.searchPort}`;
+  }
+
+  public get botToken() {
+    return this.envConfig.TELEGRAM_BOT_TOKEN;
   }
 }

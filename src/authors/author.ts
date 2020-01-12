@@ -10,13 +10,13 @@ export class Author {
   public id: string = v4();
 
   @Field()
-  public firstName: string = uniqueId('firstName');
+  public firstName: string;
 
   @Field()
-  public lastName: string = uniqueId('latName');
+  public lastName: string;
 
-  @Field()
-  public age: number = random(MINIMUM_AGE, MAXIMUM_AGE);
+  @Field({ nullable: true })
+  public age?: number;
 
   constructor(createOrUpdateModel?: CreateOrUpdateAuthorInput) {
     const incomingModel = pickBy(createOrUpdateModel, Boolean);

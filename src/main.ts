@@ -4,14 +4,28 @@ import { ConfigService } from './config/config.service';
 import * as compression from 'compression';
 import { ValidationPipe } from '@nestjs/common';
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  const config = app.get(ConfigService);
+declare const module: any;
+class App {
+  public static async main() {
+    const app = new App();
 
-  app.useGlobalPipes(new ValidationPipe({ skipMissingProperties: true }));
-  app.use(compression());
+    app.bootstrap();
+  }
 
-  await app.listen(config.port);
+  private async bootstrap() {
+    const app = await NestFactory.create(AppModule);
+    const config = app.get(ConfigService);
+
+    app.useGlobalPipes(new ValidationPipe({ skipMissingProperties: true }));
+    app.use(compression());
+
+    await app.listen(config.port);
+
+    if (module.hot) {
+      module.hot.accept();
+      module.hot.dispose(() => app.close());
+    }
+  }
 }
 
-bootstrap();
+App.main();

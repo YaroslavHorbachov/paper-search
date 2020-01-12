@@ -20,10 +20,7 @@ import { SearchService } from '../search/search.service';
       useFactory: async search => {
         const service = new SearchManagerService(
           search,
-          new SetupIndexData(
-            AUTHORS_INDEX_NAME,
-            join(__dirname, 'mappings/author'),
-          ),
+          new SetupIndexData(AUTHORS_INDEX_NAME, 'mappings/authors.json'),
         );
         await service.syncIndex();
 
@@ -32,5 +29,6 @@ import { SearchService } from '../search/search.service';
       inject: [SearchService],
     },
   ],
+  exports: [AuthorsService],
 })
 export class AuthorsModule {}

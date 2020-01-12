@@ -7,7 +7,7 @@ type Author {
   id: String!
   firstName: String!
   lastName: String!
-  age: Float!
+  age: Float
 }
 
 input CreateOrUpdateAuthorInput {
@@ -30,11 +30,13 @@ type Mutation {
 
 type Paper {
   id: String!
+  messageId: Float!
   title: String!
-  lead: String
   content: String!
+  lead: String
   authorId: String
   createdOn: DateTime!
+  updatedOn: DateTime
   sources: [String!]
   cover: String
 }

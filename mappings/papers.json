@@ -1,0 +1,33 @@
+{
+  "mappings": {
+    "properties": {
+      "messageId": {
+        "type": "long"
+      },
+      "title": {
+        "type": "text"
+      },
+      "content": {
+        "type": "text"
+      },
+      "lead": {
+        "type": "text"
+      },
+      "authorId": {
+        "type": "keyword"
+      },
+      "createdOn": {
+        "type": "date"
+      },
+      "updatedOn": {
+        "type": "date"
+      },
+      "sources": {
+        "type": "keyword"
+      },
+      "cover": {
+        "type": "keyword"
+      }
+    }
+  }
+}
