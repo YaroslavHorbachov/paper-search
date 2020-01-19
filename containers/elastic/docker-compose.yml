@@ -1,0 +1,21 @@
+version: "2"
+
+services:
+  elastic:
+    image: bitnami/elasticsearch:latest
+    environment:
+      - BITNAMI_DEBUG=true
+      - ELASTICSEARCH_CLUSTER_NAME=${ELASTICSEARCH_CLUSTER_NAME}
+      - ELASTICSEARCH_NODE_NAME=${ELASTICSEARCH_NODE_NAME}
+      - ELASTICSEARCH_PORT_NUMBER=9266
+      - ELASTICSEARCH_NODE_PORT_NUMBER=9366
+      - ELASTICSEARCH_HEAP_SIZE=2048m
+    ports:
+      - 9266:9266
+      - 9366:9366
+    volumes:
+      - elastic_data:/bitnami/elasticsearch/data
+
+volumes:
+  elastic_data:
+    driver: local
