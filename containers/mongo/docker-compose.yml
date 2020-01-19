@@ -1,0 +1,19 @@
+version: "2"
+
+services:
+  mongo:
+    image: bitnami/mongodb:latest
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      - MONGODB_DATABASE=bag
+      - MONGODB_USERNAME=bag
+      - MONGODB_PASSWORD=password-bag
+      - MONGODB_ROOT_PASSWORD=root-password-bag
+    volumes:
+      - mongodb_data:/bitnami:rw
+
+volumes:
+  mongodb_data:
+    driver: local

@@ -1,15 +1,18 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { ConfigService } from './config/config.service';
-import * as compression from 'compression';
+import compression from 'compression';
 import { ValidationPipe } from '@nestjs/common';
+
+import { ConfigService } from './config/config.service';
+import { AppModule } from './app.module';
+import { AppBootService } from './boot';
+import { concat, defer } from 'rxjs';
 
 declare const module: any;
 class App {
   public static async main() {
     const app = new App();
 
-    app.bootstrap();
+    concat(AppBootService.boot(), defer(app.bootstrap)).subscribe();
   }
 
   private async bootstrap() {
