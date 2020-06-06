@@ -34,7 +34,7 @@
     "@types/node-telegram-bot-api": "^0.31.0",
     "@types/sleep": "^0.0.7",
     "@types/uuid": "^3.4.5",
-    "apollo-server-core": "^2.8.1",
+    "apollo-server-core": "^2.14.2",
     "apollo-server-express": "^2.8.1",
     "chance": "^1.1.0",
     "class-transformer": "^0.2.3",
